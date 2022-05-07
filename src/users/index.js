@@ -18,17 +18,16 @@ usersRouter.post("/", async (req, res, next) => {
   }
 })
 
-////////////users/:username/favorites
-// POST	Creates favorite thing for user -----TESTED -------
+////////////users/:username/favorites------TESTED----- yatusabepapi
+// POST	Creates favorite thing for user
 usersRouter.post("/:username/favorites", async (req, res, next) => {
   try {
     const user = usersSchema.find({ username: req.params.username })
 
-    // console.log("this is the user", user)
     if (user) {
       const favoriteToAdd = await favoritesSchema({
         ...req.body,
-        username: req.params.username,
+        username: user,
       }).save()
 
       const modifiedUser = await usersSchema.findOneAndUpdate(
@@ -50,8 +49,7 @@ usersRouter.post("/:username/favorites", async (req, res, next) => {
 //Lists favorite things of user
 usersRouter.get("/:username/favorites", async (req, res, next) => {
   try {
-    const user = await usersSchema.findOne({ username: req.params.username }).populate({ path: "favorites", model: Favorite })
-    // const user = await usersSchema.findOne({ username: req.params.username }).populate("favorites")
+    const user = await usersSchema.findOne({ username: req.params.username }).populate("favorites")
 
     res.status(200).send(user)
   } catch (error) {

@@ -16,4 +16,6 @@ const favoritesSchema = new Schema(
   },
   { timestamps: true }
 )
+favoritesSchema.set("validateBeforeSave", false)
+
 export default model("Favorite", favoritesSchema)
