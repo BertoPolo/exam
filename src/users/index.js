@@ -70,13 +70,18 @@ usersRouter.get("/:username/favorites", async (req, res, next) => {
 
 /////users/:username/favorites/:favoriteId
 // Gets single favorite thing of user
-// usersRouter.get("/", async (req, res, next) => {
-//   try {
-//   } catch (error) {
-//     console.log(error)
-//     next(error)
-//   }
-// })
+usersRouter.get("/:username/favorites/:favoriteId", async (req, res, next) => {
+  const user = await usersSchema.findOne({ username: req.params.username }).populate("favorites")
+
+  const favThing = await user.favorites.find((one) => req.params.favoriteId === one._id.toString())
+
+  res.status(200).send(favThing)
+  try {
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+})
 
 //////users/:username/favorites/csv/
 // Gets favorite things of user as csv stream.
@@ -87,5 +92,24 @@ usersRouter.get("/:username/favorites", async (req, res, next) => {
 //     next(error)
 //   }
 // })
+
+///users/:username/favorites/:favoriteId
+//Deletes favorite thing for user
+usersRouter.delete("/:username/favorites/:favoriteId", async (req, res, next) => {
+  try {
+    await usersSchema.findOneAndDelete(
+      { username: req.params.username },
+      {
+        $pull: { favorites: { _id: req.params.favoriteId } },
+      },
+      { new: true }
+    )
+
+    res.status(200).send("this stuff is deleted")
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+})
 
 export default usersRouter
