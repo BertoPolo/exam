@@ -8,6 +8,7 @@ import { v2 as cloudinary } from "cloudinary"
 const usersRouter = express.Router()
 
 const cloudinaryfavImagesUploader = multer({
+  //-----TESTED----
   storage: new CloudinaryStorage({
     cloudinary,
     params: {
@@ -58,12 +59,12 @@ usersRouter.post("/:username/favorites", async (req, res, next) => {
 })
 
 ///users/:username/favorites
-//Lists favorite things of user
+//Lists favorite things of user-----TESTED----
 usersRouter.get("/:username/favorites", async (req, res, next) => {
   try {
     const user = await usersSchema.findOne({ username: req.params.username }).populate("favorites")
 
-    res.status(200).send(user)
+    res.status(200).send(user.favorites)
   } catch (error) {
     console.log(error)
     next(error)
@@ -81,7 +82,7 @@ usersRouter.get("/:username/favorites", async (req, res, next) => {
 // })
 
 /////users/:username/favorites/:favoriteId
-// Gets single favorite thing of user
+// Gets single favorite thing of user------TESTED----
 usersRouter.get("/:username/favorites/:favoriteId", async (req, res, next) => {
   const user = await usersSchema.findOne({ username: req.params.username }).populate("favorites")
 
@@ -153,7 +154,7 @@ usersRouter.put("/favorites/:favoriteId", async (req, res, next) => {
   }
 })
 
-// /users/:username/favorites/:favoriteId/image ---CRASHES-----
+// /users/:username/favorites/:favoriteId/image ---TESTED-----
 // 	PUT.	Uploads image to cloudinary for favorite thing and updates image field of favorite thing.
 usersRouter.put("/favorites/:favoriteId/image", cloudinaryfavImagesUploader, async (req, res, next) => {
   try {
