@@ -7,8 +7,8 @@ import { v2 as cloudinary } from "cloudinary"
 
 const usersRouter = express.Router()
 
+//-----TESTED----
 const cloudinaryfavImagesUploader = multer({
-  //-----TESTED----
   storage: new CloudinaryStorage({
     cloudinary,
     params: {
@@ -72,14 +72,16 @@ usersRouter.get("/:username/favorites", async (req, res, next) => {
 })
 
 ////users/:username/favorites/search?type=music
-//Searchs favorite things of user by type,name,description.
-// usersRouter.get("/", async (req, res, next) => {
-//   try {
-//   } catch (error) {
-//     console.log(error)
-//     next(error)
-//   }
-// })
+//Searchs favorite things of user by type,name,description. ---NOT TESTED----
+/* usersRouter.get("/:username/favorites/search?type=music", async (req, res, next) => {
+  try {
+    const user = await usersSchema.findOne({ username: req.params.username })
+    // take a look on query to mongo ,
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
+}) */
 
 /////users/:username/favorites/:favoriteId
 // Gets single favorite thing of user------TESTED----
