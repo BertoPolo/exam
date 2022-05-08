@@ -14,7 +14,7 @@ const cloudinaryfavImagesUploader = multer({
       folder: "favImages",
     },
   }),
-}).single("favImages")
+}).single("image")
 
 //Post a User  ----TESTED ----
 usersRouter.post("/", async (req, res, next) => {
@@ -153,18 +153,18 @@ usersRouter.put("/favorites/:favoriteId", async (req, res, next) => {
   }
 })
 
-// /users/:username/favorites/:favoriteId/image
+// /users/:username/favorites/:favoriteId/image ---CRASHES-----
 // 	PUT.	Uploads image to cloudinary for favorite thing and updates image field of favorite thing.
-usersRouter.put("/:username/favorites/:favoriteId/image", cloudinaryfavImagesUploader, async (req, res, next) => {
+usersRouter.put("/favorites/:favoriteId/image", cloudinaryfavImagesUploader, async (req, res, next) => {
   try {
-    const imagePathUpdater = await usersSchema.findOneAndUpdate({ username: req.params.username }, { image: req.file.path }, { new: true })
-
-    // if (imagePathUpdater) {
-    //   res.status(200).send()
-    // } else {
-    //   console.log(error)
-    //   next(error)
-    // }
+    const imagePathUpdater = await favoritesSchema.findByIdAndUpdate(req.params.favoriteId, { image: req.file.path }, { new: true })
+    console.log(imagePathUpdater)
+    if (imagePathUpdater) {
+      res.status(200).send("hi")
+    } else {
+      console.log(error)
+      next(error)
+    }
   } catch (error) {
     console.log(error)
     next(error)
